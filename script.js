@@ -7,7 +7,7 @@ const modalBackground = document.getElementById("modal-background");
 
 // variables
 let userText = "";
-let errorCount = 0;
+let errorCount = [];
 let startTime;
 let questionText = "";
 
@@ -46,6 +46,8 @@ const typeController = (e) => {
     display.innerHTML += `<span class="green">${newLetter === " " ? "▪" : newLetter}</span>`;
   } else {
     display.innerHTML += `<span class="red">${newLetter === " " ? "▪" : newLetter}</span>`;
+    errorCount += newLetter;
+    return errorCount.length;
   }
 
   // check if given question text is equal to user typed text
@@ -56,7 +58,6 @@ const typeController = (e) => {
 
 const validate = (key) => {
   if (key === questionText[userText.length - 1]) {
-    console.log(validate);
     return true;
   }
   return false;
@@ -69,7 +70,7 @@ const gameOver = () => {
   // so total time taken is current time - start time
   const finishTime = new Date().getTime();
   const timeTaken = (finishTime - startTime) / 1000;
-  const tikeTakenInt = parseInt(timeTaken);
+  const timeTakenInt = parseInt(timeTaken);
 
   // show result modal
   resultModal.innerHTML = "";
@@ -82,12 +83,12 @@ const gameOver = () => {
   // show result
   resultModal.innerHTML += `
     <h1>Finished!</h1>
-    <p>You took: <span class="bold">${tikeTakenInt}</span> seconds</p>
-    <p>You made <span class="bold red">${errorCount}</span> mistakes</p>
+    <p>You took: <span class="bold">${timeTakenInt}</span> seconds</p>
+    <p>You made <span class="bold red">${errorCount.length }</span> mistakes</p>
     <button onclick="closeModal()">Close</button>
   `;
 
-  addHistory(questionText, tikeTakenInt, errorCount);
+  addHistory(questionText, timeTakenInt, errorCount.length);
 
   // restart everything
   startTime = null;
